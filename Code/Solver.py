@@ -5,14 +5,6 @@ import cmath
 ##################### Functions #####################
 
 
-def isNumeric(x):
-    try:
-        float(x)
-    except:
-        return False
-    return True
-
-
 def getRectForm(r, phi):
     # returns a the rectangular form of the number
     r = float(r)
@@ -32,12 +24,17 @@ I_Names = []; I_Nodes = []; I_Values = []; I_Types = []; I_V_I_P = []
 
 #####################################################
 ################### Intialization ###################
+
+
 circ = circuit.Circuit(title="M's  circuit")
 # File = open(input("Enter Your File Name: ") + '.txt')
 File = open('YC.txt')
 Frequancy = float(File.readline())
+
 #####################################################
 ################ Parsing the netlist ################
+
+
 for line in File:
     L = (File.readline()).split()
     element = L[0][0]
@@ -101,8 +98,11 @@ for line in File:
             I_Types.append(("", "AC"))
             I_Values.append((0, getRectForm(L[3], L[4])))
             circ.add_isource(name, nodePos, nodeNeg, dc_value=0, ac_value=getRectForm(L[3], L[4]))
+
 #####################################################
 ################ Solving the netlist ################
+
+
 print("The Netlist")
 print(circ)
 ac = ahkab.new_ac(start=Frequancy, stop=Frequancy, points=2, x0=None)
@@ -110,8 +110,10 @@ r = ahkab.run(circ, ac)
 # for i in r['ac']:
 #     print(i[0] + "= ", i[1][1])
 File.close()
+
 #####################################################
 ################ saving the data ################
+
 print("Solution: ID-->V-->I-->Pw")
 # Passive elements
 roundTO = 5
@@ -195,8 +197,10 @@ for i, node in enumerate(I_Nodes):
     I_V_I_P.append((I_Names, V, I, P))
     IPS += P
     print(I_V_I_P)
+
 #####################################################
 ################ Power Balance ################
+
 pwdelivered = VPS+IPS
 print("pwDelivered", pwdelivered)
 pwconsumed = RPS
@@ -205,3 +209,4 @@ pwreserved = LPS + CPS
 print("pwReserved", pwreserved)
 pwbalance = round(pwdelivered-(pwreserved-pwconsumed), roundTO)
 print("pwBalance", pwbalance)
+
